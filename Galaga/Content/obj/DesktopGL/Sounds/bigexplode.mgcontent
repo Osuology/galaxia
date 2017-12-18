@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/bigexplode.wav</SourceFile>
+  <SourceTime>2017-12-04T20:28:21.6554912-08:00</SourceTime>
+  <DestFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/bin/DesktopGL/Sounds/bigexplode.xnb</DestFile>
+  <DestTime>2017-12-18T15:15:54.0655105-08:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2017-03-01T07:05:36-08:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2017-03-01T07:05:36-08:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

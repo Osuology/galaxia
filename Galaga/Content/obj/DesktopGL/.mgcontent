@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/panel.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/button.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Fonts/juib.spritefont</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/light_switch.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/inverted_panel.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/none.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/ship.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/bullet.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/hit2.wav</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/lazer2.wav</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/explode3.wav</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/enemy2.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/explosion-8.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/lazer2.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/enemy.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/bigexplosion-8.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/bigexplode.wav</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/blackhole.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/lives.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/boss.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/missile.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/game over.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/galaxia.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Textures/beatgame.png</File>
+    <File>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/pasace.ogg</File>
+  </SourceFiles>
+</SourceFileCollection>
