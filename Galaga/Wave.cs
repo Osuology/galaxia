@@ -15,6 +15,8 @@ namespace Galaxia
 
         public int enemies = 0;
 
+        public int last = 0;
+
         public Boss boss;
 
         public bool allDead = false;
@@ -33,7 +35,7 @@ namespace Galaxia
 
             groups = new List<Group>();
 
-            groups.Add(group1);
+            groups.Add(group1); 
             groups.Add(group2);
             groups.Add(group3);
             groups.Add(group4);
@@ -60,21 +62,32 @@ namespace Galaxia
             boss.LoadContent(content, "boss");
         }
 
-        public void Update(ref Ship ship, GameTime gt, ref List<Highscore> scores)
+        public void Update(ref Ship ship, GameTime gt, ref List<Highscore> scores, ref List<Bullet> bullets)
         {
             for (int i = 0; i < groups.Count; i++)
             {
-                groups[i].Update(ref ship, gt, ref scores);
+                groups[i].Update(ref ship, gt, ref scores, ref bullets);
 
-                if (groups[i].allDead && groups.Last() != groups[i])
-                    foreach (Enemy enemy in groups[i+1].enemies)
+                if (groups[last].allDead && i > last)
+                    foreach (Enemy enemy in groups[i].enemies)
                     {
                         if (!enemy.fullOnScreen)
                             enemy.pos.Y += 8;
+                        else
+                            last = i;
                     }
+
+                foreach (Enemy enemy in groups[i].enemies)
+                {
+                    if (enemy.hitbox.Intersects(ship.hitbox))
+                    {
+                        enemy.health = 0;
+                        ship.Damage(1);
+                    }
+                }
             }
 
-            if (groups[0].allDead && groups[1].allDead && groups[2].allDead && groups[3].allDead && groups[4].allDead && groups[5].allDead && groups[6].allDead && groups[7].allDead)
+            if (groups[0].allDead  && groups[1].allDead && groups[2].allDead && groups[3].allDead && groups[4].allDead && groups[5].allDead && groups[6].allDead && groups[7].allDead)
             {
                 allDead = true;
             }
@@ -85,11 +98,11 @@ namespace Galaxia
 
         public void Draw(SpriteBatch sb)
         {
-            foreach (Group group in groups)
-                group.Draw(sb);
-
             if (!boss.dead)
                 boss.Draw(sb);
+
+            foreach (Group group in groups)
+                group.Draw(sb);
         }
     }
 }

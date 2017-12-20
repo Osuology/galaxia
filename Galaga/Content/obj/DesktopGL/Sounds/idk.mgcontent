@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/idk.ogg</SourceFile>
+  <SourceTime>2017-12-18T17:26:09.5194056-08:00</SourceTime>
+  <DestFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/bin/DesktopGL/Sounds/idk.xnb</DestFile>
+  <DestTime>2017-12-20T00:39:41.9256731-08:00</DestTime>
+  <Importer>OggImporter</Importer>
+  <ImporterTime>2017-03-01T07:05:36-08:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2017-03-01T07:05:36-08:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>

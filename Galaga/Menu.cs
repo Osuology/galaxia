@@ -18,6 +18,8 @@ namespace Galaxia
         public Texture2D gameOver;
         //Congratulations texture
         public Texture2D beatGame;
+        //Highscore texture
+        public Texture2D highscore;
         //Side panels (for arcade feel)
         public Texture2D panel;
         public Texture2D inverted_panel;
@@ -54,6 +56,8 @@ namespace Galaxia
 
         List<Highscore> scores;
 
+        List<Bullet> bullets;
+
         Texture2D lives;
         Rectangle liveSource;
 
@@ -66,11 +70,13 @@ namespace Galaxia
             switcha = new Switch(0, 0, 103, 176);
 
             //Center all menus, initialize their options
-            mainMenu = new Menu(3, new string[] { "Start Game (WIP)", "High Scores", "Options" }, 640, 270);
+            mainMenu = new Menu(3, new string[] { "Start Game", "High Scores", "Options" }, 640, 270);
             optionsMenu = new Menu(3, new string[] { "Switch Resolution:", "Switch FPS Limit:", "Back to Main Menu" }, 640, 270);
             highscoreMenu = new Menu(2, new string[] { "", "Back to Main Menu" }, 640, 270);
-            ingameMenu = new Menu(2, new string[] { "Restart", "Back to Main Menu" }, 640, 270);
-            deathMenu = new Menu(2, new string[] { "Restart", "Back to Main Menu" }, 640, 270);
+            ingameMenu = new Menu(2, new string[] { "Unpause", "Back to Main Menu" }, 640, 270);
+            deathMenu = new Menu(2, new string[] { "Quit", "" }, 640, 270);
+
+            bullets = new List<Bullet>();
 
             ship = new Ship(640 - 32, 720 - 64, 64, 64);
 
@@ -81,15 +87,6 @@ namespace Galaxia
             liveSource = new Rectangle(0, 0, 34, 34);
         }
 
-        public void ReInit()
-        {
-            ship = new Ship(640 - 32, 720 - 64, 64, 64);
-
-            wave = new Wave();
-
-            scores = new List<Highscore>();
-        }
-
         //Load graphical content.
         public void LoadContent(ContentManager content)
         {
@@ -97,6 +94,7 @@ namespace Galaxia
             logo = content.Load<Texture2D>("Textures/galaxia");
             gameOver = content.Load<Texture2D>("Textures/game over");
             beatGame = content.Load<Texture2D>("Textures/beatgame");
+            highscore = content.Load<Texture2D>("Textures/high_score");
             panel = content.Load<Texture2D>("Textures/panel");
             inverted_panel = content.Load<Texture2D>("Textures/inverted_panel");
 
@@ -120,7 +118,9 @@ namespace Galaxia
         //Update all objects
         public void Update(Camera cam, GameTime gt)
         {
-            if (Input.KeyReleased(Keys.M))
+            StaticValues.enemies = wave.enemies;
+
+            if (Input.KeyReleased(Keys.F1))
                 StaticValues.debug = !StaticValues.debug;
 
             if (Input.KeyDown(Keys.LeftAlt))
@@ -138,12 +138,20 @@ namespace Galaxia
             }
             else if (StaticValues.Gamestate == 1)
             {
-                ship.Update(cam);
+                ship.Update(cam, gt);
 
-                if (Input.KeyReleased(Keys.I))
-                    ship.health = 0;
+                wave.Update(ref ship, gt, ref scores, ref bullets);
 
-                wave.Update(ref ship, gt, ref scores);
+                for (int i = bullets.Count - 1; i >= 0; i--)
+                {
+                    bullets[i].Update();
+
+                    if (ship.hitbox.Intersects(bullets[i].hitbox))
+                    {
+                        ship.Damage(1);
+                        bullets.Remove(bullets[i]);
+                    }
+                }
 
                 if (wave.boss.dead)
                     timer2 += gt.ElapsedGameTime.TotalMilliseconds;
@@ -177,9 +185,6 @@ namespace Galaxia
                 if (scores[i].alpha <= 0)
                     scores.RemoveAt(i);
             }
-
-            if (StaticValues.reinit)
-                ReInit();
         }
         
         public void Draw(SpriteBatch sb, Camera cam, GameTime gt)
@@ -217,12 +222,22 @@ namespace Galaxia
 
                 wave.Draw(sb);
 
+                foreach (Bullet bullet in bullets)
+                {
+                    bullet.Draw(sb);
+                }
+
                 sb.Draw(lives, new Vector2(400, 704), liveSource, Color.White);
             }
             else if (StaticValues.Gamestate == 2)
             {
                 ship.Draw(sb);
                 wave.Draw(sb);
+
+                foreach (Bullet bullet in bullets)
+                {
+                    bullet.Draw(sb);
+                }
 
                 ingameMenu.Draw(sb);
                 sb.Draw(lives, new Vector2(400, 704), liveSource, Color.White);
@@ -232,6 +247,11 @@ namespace Galaxia
                 ship.Draw(sb);
 
                 wave.Draw(sb);
+
+                foreach (Bullet bullet in bullets)
+                {
+                    bullet.Draw(sb);
+                }
 
                 deathMenu.Draw(sb, cam);
 
@@ -253,19 +273,21 @@ namespace Galaxia
                 if (StaticValues.fpsOptions[StaticValues.fpsLimit] > 0 && StaticValues.fpsOptions[StaticValues.fpsLimit] < 1000)
                 sb.DrawString(highscoreMenu.font, StaticValues.fpsOptions[StaticValues.fpsLimit].ToString(), new Vector2(760, 330), Color.White);
                 else if (StaticValues.fpsOptions[StaticValues.fpsLimit] == 0)
-                    sb.DrawString(highscoreMenu.font, "VSync", new Vector2(760, 330), Color.White);
+                    sb.DrawString(highscoreMenu.font, "VSync", new Vector2(776, 330), Color.White);
                 else
-                    sb.DrawString(highscoreMenu.font, "Unlimited", new Vector2(760, 330), Color.White);
+                    sb.DrawString(highscoreMenu.font, "Unlimited", new Vector2(776, 330), Color.White);
 
-                sb.DrawString(highscoreMenu.font, StaticValues.res[StaticValues.currentRes].ToString(), new Vector2(773, 270), Color.White);
+                sb.DrawString(highscoreMenu.font, StaticValues.res[StaticValues.currentRes].ToString(), new Vector2(640, 296), Color.White);
 
             }
             else if (StaticValues.Gamestate == 6)
             {
                 for (int i = 0; i < StaticValues.highscores.Count; i++)
                 {
-                    sb.DrawString(highscoreMenu.font, StaticValues.highscores[i].ToString(), new Vector2(640, 16 + (64 * i)), Color.White);
+                    sb.DrawString(highscoreMenu.font, StaticValues.highscores[i].ToString(), new Vector2(640 - highscoreMenu.font.MeasureString(StaticValues.highscores[i].ToString()).X/2, 256 + (64 * i)), Color.White);
                 }
+
+                sb.Draw(highscore, new Rectangle(1280 / 2, 720 / 4, (int)(highscore.Width * 2.5), (int)(highscore.Height * 2.5)), null, Color.White, 0f, new Vector2(highscore.Width / 2, highscore.Height / 2), SpriteEffects.None, 0f);
 
                 highscoreMenu.Draw(sb);
             }
@@ -276,9 +298,29 @@ namespace Galaxia
             }
 
             if (switcha.on)
-                sb.DrawString(mainMenu.font, StaticValues.highscore + " score.", new Vector2(200 - (mainMenu.font.MeasureString(StaticValues.highscore + " scores.").X/2), 720 - mainMenu.font.MeasureString(StaticValues.highscore + " score.").Y), Color.Black);
+            {
+                sb.DrawString(mainMenu.font, StaticValues.highscore + " score.", new Vector2(200 - (mainMenu.font.MeasureString(StaticValues.highscore + " scores.").X / 2), 720 - mainMenu.font.MeasureString(StaticValues.highscore + " score.").Y), Color.Black);
+
+                sb.DrawString(mainMenu.font, "A or D to move.", new Vector2(1080 - mainMenu.font.MeasureString("A or D to move.").X/2, 128), Color.Black);
+
+                sb.DrawString(mainMenu.font, "Space to shoot.", new Vector2(1080 - mainMenu.font.MeasureString("Space to shoot.").X/2, 128 + 64), Color.Black);
+
+                sb.DrawString(mainMenu.font, "Left shift + A or D to dodge.", new Vector2(1080 - mainMenu.font.MeasureString("Left shift + A or D to dodge.").X/2, 256), Color.Black);
+
+                sb.DrawString(mainMenu.font, "Escape to go to menu.", new Vector2(1080 - mainMenu.font.MeasureString("Escape to go to menu.").X/2, 256 + 64), Color.Black);
+            }
             else
+            {
                 sb.DrawString(mainMenu.font, StaticValues.highscore + " score.", new Vector2(200 - (mainMenu.font.MeasureString(StaticValues.highscore + " scores.").X / 2), 720 - mainMenu.font.MeasureString(StaticValues.highscore + " score.").Y), Color.White);
+
+                sb.DrawString(mainMenu.font, "A or D to move.", new Vector2(1080 - mainMenu.font.MeasureString("A or D to move.").X / 2, 128), Color.White);
+
+                sb.DrawString(mainMenu.font, "Space to shoot.", new Vector2(1080 - mainMenu.font.MeasureString("Space to shoot.").X / 2, 128 + 64), Color.White);
+
+                sb.DrawString(mainMenu.font, "Left shift + A or D to dodge.", new Vector2(1080 - mainMenu.font.MeasureString("Left shift + A or D to dodge.").X / 2, 256), Color.White);
+
+                sb.DrawString(mainMenu.font, "Escape to go to menu.", new Vector2(1080 - mainMenu.font.MeasureString("Escape to go to menu.").X / 2, 256 + 64), Color.White);
+            }
 
             if (timer > 1000)
             {
@@ -547,7 +589,7 @@ namespace Galaxia
 
         public override void Function()
         {
-            if (_text == "Start Game (WIP)")
+            if (_text == "Start Game")
             {
                 StaticValues.Gamestate = 1;
             }
@@ -563,6 +605,14 @@ namespace Galaxia
             else if (_text == "Back to Main Menu")
             {
                 StaticValues.Gamestate = 0;
+            }
+            else if (_text == "Unpause")
+            {
+                StaticValues.Gamestate = 1;
+            }
+            else if (_text == "Quit")
+            {
+                StaticValues.Close = true;
             }
             else if (_text == "Switch FPS Limit:")
             {

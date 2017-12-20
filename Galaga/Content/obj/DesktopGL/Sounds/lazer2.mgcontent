@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/lazer2.wav</SourceFile>
   <SourceTime>2017-11-04T10:20:40.9088032-07:00</SourceTime>
   <DestFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/bin/DesktopGL/Sounds/lazer2.xnb</DestFile>
-  <DestTime>2017-12-18T15:15:53.6976522-08:00</DestTime>
+  <DestTime>2017-12-20T00:39:41.2201723-08:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2017-03-01T07:05:36-08:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

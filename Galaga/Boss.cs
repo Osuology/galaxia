@@ -29,10 +29,14 @@ namespace Galaxia
         public List<Missile> missiles;
         public List<Bullet> bullets;
 
+        public BBullet bbullet;
         public Blackhole hole;
+
+        public bool bbulletfire = false;
 
         private Texture2D missileTex;
         private Texture2D bulletTex;
+        private Texture2D BbulletTex;
 
         public Boss(int x, int y, int width, int height) : base(x, y, width, height)
         {
@@ -40,6 +44,7 @@ namespace Galaxia
 
             missiles = new List<Missile>();
             bullets = new List<Bullet>();
+
             hole = new Blackhole(400, 656, 64, 64);
         }
 
@@ -47,6 +52,7 @@ namespace Galaxia
         {
             missileTex = content.Load<Texture2D>("Textures/missile");
             bulletTex = content.Load<Texture2D>("Textures/lazer2");
+            BbulletTex = content.Load<Texture2D>("Textures/blackholebullet");
 
             hole.LoadContent(content, "blackhole");
 
@@ -89,7 +95,7 @@ namespace Galaxia
             {
                 if (ship.bullets[i].hitbox.Intersects(hitbox))
                 {
-                    Damage(60);
+                    Damage(1);
                     ship.bullets.Remove(ship.bullets[i]);
                 }
             }
@@ -103,7 +109,12 @@ namespace Galaxia
                 scores.Add(new Highscore(10000000, (int)pos.X + 200, (int)pos.Y + 300));
 
                 StaticValues.highscore += 10000000;
+
+                StaticValues.SaveHighscores();
             }
+
+            if (bbullet != null && bbullet.ready)
+                hole.Update(ref ship, gt);
 
             base.Update();
         }
@@ -216,6 +227,20 @@ namespace Galaxia
             int xRouteDown = 880;
             int xRouteUp = 400;
 
+            if (!bbulletfire)
+            {
+                bbullet = new BBullet((int)pos.X + 128, (int)pos.Y + 256, 16, 16);
+                bbulletfire = true;
+            }
+
+            if (!bbullet.shot)
+            {
+                bbullet.SetTexture(BbulletTex);
+                bbullet.shot = true;
+            }
+
+            bbullet.Update();
+
             int yRouteLeft = 256;
             int yRouteRight = -100;
 
@@ -223,28 +248,33 @@ namespace Galaxia
             {
                 vel.X = 5;
                 vel.Y = 0;
+
+                if (pos.X + 128 >= ship.hitbox.X && pos.X + 128 <= ship.hitbox.X + 64)
+                    ShootMissile();
             }
             else if (pos.X + hitbox.Width >= xRouteDown && pos.Y + hitbox.Height < yRouteLeft)
             {
                 vel.X = 0;
                 vel.Y = 5;
 
-                ShootMissile();
+                if (pos.X + 128 >= ship.hitbox.X && pos.X + 128 <= ship.hitbox.X + 64)
+                    ShootMissile();
             }
             else if (pos.Y + hitbox.Height == yRouteLeft && pos.X > xRouteUp)
             {
                 vel.X = -5;
                 vel.Y = 0;
+                if (pos.X + 128 >= ship.hitbox.X && pos.X + 128 <= ship.hitbox.X + 64)
+                    TripleShootLazer();
             }
             else if (pos.X == xRouteUp && pos.Y > yRouteRight)
             {
                 vel.X = 0;
                 vel.Y = -5;
 
-                TripleShootLazer();
+                if (pos.X + 128 >= ship.hitbox.X && pos.X + 128 <= ship.hitbox.X + 64)
+                    TripleShootLazer();
             }
-
-            hole.Update(ref ship, gt);
         }
 
         public void ShootMissile()
@@ -317,7 +347,10 @@ namespace Galaxia
             foreach (Bullet bullet in bullets)
                 bullet.Draw(sb);
 
-            if (phase == 3)
+            if (bbullet != null && !bbullet.ready)
+                bbullet.Draw(sb);
+
+            if (phase == 3 && bbullet != null && bbullet.ready)
                 hole.Draw(sb);
 
             base.Draw(sb);
@@ -400,6 +433,60 @@ namespace Galaxia
         public override void Draw(SpriteBatch sb)
         {
             base.Draw(sb);
+        }
+    }
+
+    class BBullet : Sprite
+    {
+        public bool ready = false;
+        public bool shot = false;
+
+        public BBullet(int x, int y, int width, int height) : base(x, y, width, height)
+        {
+        }
+
+        public override void LoadContent(ContentManager content, string path)
+        {
+            base.LoadContent(content, path);
+        }
+
+        public void SetTexture(Texture2D _tex)
+        {
+            tex = _tex;
+        }
+
+        public override void Update()
+        {
+            if (tex != null)
+            {
+                Vector2 pos1 = new Vector2(408, 712);
+
+                Vector2 center = new Vector2(pos.X + 8, pos.Y + 8);
+
+                if (vel == null || vel == Vector2.Zero)
+                {
+                    float xDif = center.X - pos1.X;
+                    float yDif = center.Y - pos1.Y;
+
+                    if (xDif < 0)
+                        xDif *= -1;
+
+                    float ratio = xDif / yDif;
+
+                    if (center.X > pos1.X)
+                        vel = new Vector2(15 * ratio, 15);
+                    else if (center.X < pos1.X)
+                        vel = new Vector2(-(15 * ratio), 15);
+                }
+
+                if (center.X <= pos1.X + 32)
+                {
+                    vel = Vector2.Zero;
+                    ready = true;
+                }
+
+                base.Update();
+            }
         }
     }
 }

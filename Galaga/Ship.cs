@@ -16,6 +16,8 @@ namespace Galaxia
 
         public int cooldown = 0;
 
+        public double shootDown = 0;
+
         public List<Bullet> bullets;
 
         private Texture2D bulleT;
@@ -33,14 +35,16 @@ namespace Galaxia
             base.LoadContent(content, path);
         }
 
-        public override void Update(Camera cam)
+        public void Update(Camera cam, GameTime gt)
         {
             if (cooldown > 0)
                 cooldown--;
 
+            shootDown -= gt.ElapsedGameTime.TotalMilliseconds;
+
             for (int i = bullets.Count - 1; i >= 0 ; i--)
             {
-                bullets[i].Update(cam);
+                bullets[i].Update();
 
                 if (bullets[i].delete == true)
                     bullets.Remove(bullets[i]);
@@ -65,9 +69,10 @@ namespace Galaxia
                     vel.X = 0;
             }
 
-            if (Input.KeyPressed(Keys.Space))
+            if (Input.KeyDown(Keys.Space) && shootDown <= 0)
             {
                 Shoot();
+                shootDown = 70;
             }
 
             if (health <= 0)
@@ -128,9 +133,9 @@ namespace Galaxia
             base.LoadContent(content, path);
         }
 
-        public override void Update(Camera cam)
+        public override void Update()
         {
-            if (pos.Y < 0 - cam.pos.Y)
+            if (pos.Y < 0)
                 delete = true;
 
             base.Update();

@@ -14,14 +14,16 @@ namespace Galaxia
         public static bool Close = false;
         public static byte Gamestate = 0;
         public static Vector2 scale = Vector2.One;
-        public static List<uint> highscores;
+        public static List<string> highscores;
         public static bool debug = false;
         public static bool tas = true;
         public static bool reinit = false;
 
+        public static int enemies;
+
         public static int highscore = 0;
 
-        public static short[] fpsOptions = { 0, 60, 120, 144, 240, 288, 1000 };
+        public static float[] fpsOptions = { 0f, 60f, 120f, 144f, 240f, 288f, 1000f };
         public static byte fpsLimit = 0;
 
         public static List<Vector2> res = new List<Vector2>();
@@ -29,35 +31,37 @@ namespace Galaxia
 
         public static void LoadHighscores()
         {
-            highscores = new List<uint>();
+            highscores = new List<string>();
 
             if (File.Exists("highscores.scores"))
             {
-                using (BinaryReader br = new BinaryReader(File.Open("highscores.scores", FileMode.Open)))
+                using (StreamReader br = new StreamReader(File.Open("highscores.scores", FileMode.Open)))
                 {
-                    var hs = br.Read();
+                    string hs = br.ReadLine();
+
                     Console.WriteLine(hs);
 
-                    highscores.Add((uint)hs);
+                    highscores.Add(hs);
                 }
             }
             else
             {
-                using (BinaryWriter bw = new BinaryWriter(File.Open("highscores.scores", FileMode.CreateNew)))
+                using (StreamWriter bw = new StreamWriter(File.Open("highscores.scores", FileMode.Create)))
                 {
-                    for (int i = 0; i < 50; i++)
-                    {
-                        bw.Write(00000000000);
-                    }
+                    bw.WriteLine(00000000);
                 }
             }
         }
 
         public static void SaveHighscores()
         {
-            using (BinaryWriter bw = new BinaryWriter(File.Open("highscores.scores", FileMode.Append)))
+            if (highscore > Convert.ToInt32(highscores[0]))
             {
-                bw.Write(StaticValues.highscore);
+                File.Delete("highscores.scores");
+                using (StreamWriter bw = new StreamWriter(File.Open("highscores.scores", FileMode.CreateNew)))
+                {
+                    bw.Write(StaticValues.highscore);
+                }
             }
         }
 

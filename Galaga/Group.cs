@@ -53,9 +53,6 @@ namespace Galaxia
 
         public Group(uint type, int offset)
         {
-            x = groups[(int)type].GetLength(0);
-            z = groups[(int)type].GetLength(1);
-
             enemies = new List<Enemy>();
             for (int i = 0; i <= groups[(int)type].GetLength(0) - 1; i++)
             {
@@ -68,7 +65,6 @@ namespace Galaxia
 
         public void LoadContent(ContentManager content)
         {
-            AnimationManager.LoadContent(content);
             foreach (Enemy en in enemies)
             {
                 if (en.aiType == 0)
@@ -78,11 +74,10 @@ namespace Galaxia
             }
         }
 
-        public void Update(ref Ship ship, GameTime gt, ref List<Highscore> scores)
+        public void Update(ref Ship ship, GameTime gt, ref List<Highscore> scores, ref List<Bullet> bullets)
         {
+            z++;
             timer -= gt.ElapsedGameTime.TotalMilliseconds;
-
-            AnimationManager.Update(gt);
 
             if (timer <= 0)
             {
@@ -100,7 +95,7 @@ namespace Galaxia
 
             for (int i = enemies.Count - 1; i >= 0; i--)
             {
-                enemies[i].Update(ref ship, gt, ref scores);
+                enemies[i].Update(ref ship, gt, ref scores, ref bullets);
 
                 if (enemies[i].dead == true)
                 {
@@ -114,9 +109,10 @@ namespace Galaxia
 
         public void Draw(SpriteBatch sb)
         {
-            AnimationManager.Draw(sb);
             foreach (Enemy en in enemies)
+            {
                 en.Draw(sb);
+            }
         }
     }
 }

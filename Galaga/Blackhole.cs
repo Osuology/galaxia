@@ -11,7 +11,7 @@ namespace Galaxia
 {
     class Blackhole : Sprite
     {
-        const float gravity = 9.81f;
+        const float gravity = 12.81f;
 
         public Rectangle source;
 

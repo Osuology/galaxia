@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -23,6 +24,10 @@ namespace Galaxia
 
         Song song;
 
+        SoundEffect levelBeat;
+
+        bool done = true;
+
         RenderTarget2D target;
 
         double rigidTimer = 0;
@@ -40,6 +45,7 @@ namespace Galaxia
             graphics.ApplyChanges();
 
             StaticValues.LoadResolutions();
+            StaticValues.LoadHighscores();
 
             IsMouseVisible = true;
 
@@ -71,6 +77,11 @@ namespace Galaxia
             SoundManager.LoadContent(Content);
 
             song = Content.Load<Song>("Sounds/pasace");
+            levelBeat = Content.Load<SoundEffect>("Sounds/idk");
+
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.15f;
         }
 
         protected override void UnloadContent()
@@ -126,7 +137,7 @@ namespace Galaxia
             {
                 graphics.SynchronizeWithVerticalRetrace = false;
                 IsFixedTimeStep = true;
-                TargetElapsedTime = TimeSpan.FromSeconds(1f / (float)StaticValues.fpsOptions[StaticValues.fpsLimit]);
+                TargetElapsedTime = TimeSpan.FromSeconds(1f / StaticValues.fpsOptions[StaticValues.fpsLimit]);
             }
 
             graphics.PreferredBackBufferWidth = (int)StaticValues.res[StaticValues.currentRes].X;
@@ -148,6 +159,13 @@ namespace Galaxia
                 rigidTimer = 0;
             }
 
+            if (StaticValues.Gamestate == 4 && done)
+            {
+                MediaPlayer.Stop();
+                levelBeat.Play(0.5f, 0f, 0f);
+                done = false;
+            }
+
             base.Update(gameTime);
         }
         
@@ -167,7 +185,7 @@ namespace Galaxia
             spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, cam.matrix);
             spriteBatch.Draw(target, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
 

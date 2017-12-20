@@ -80,3 +80,7 @@ C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\obj\Release\G
 C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Textures\beatgame.xnb
 C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Sounds\pasace.ogg
 C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Sounds\pasace.xnb
+C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Sounds\idk.ogg
+C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Sounds\idk.xnb
+C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Textures\high_score.xnb
+C:\Users\Jeff\Documents\Visual Studio 2015\Projects\Galaxia\Galaga\bin\DesktopGL\AnyCPU\Release\Content\Textures\blackholebullet.xnb

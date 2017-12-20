@@ -11,7 +11,7 @@ namespace Galaxia
 {
     class Enemy : Sprite
     {
-        uint health;
+        public uint health;
 
         public uint aiType = 0;
 
@@ -22,15 +22,13 @@ namespace Galaxia
 
         public bool dead = false;
         public bool ai = false;
-
-        //Replace with a global list so they don't dissapear when the enemy dies
-        public List<Bullet> bullets;
+        
         Texture2D bulleT;
+
+        int something = 0;
 
         public Enemy(int x, int y, int width, int height, uint ai, int id) : base(x, y, width, height)
         {
-            bullets = new List<Bullet>();
-
             aiType = ai;
 
             if (aiType == 0)
@@ -48,8 +46,9 @@ namespace Galaxia
             base.LoadContent(content, path);
         }
 
-        public void Update(ref Ship ship, GameTime gt, ref List<Highscore> scores)
+        public void Update(ref Ship ship, GameTime gt, ref List<Highscore> scores, ref List<Bullet> bullets)
         {
+            something++;
             if (cooldown > 0)
                 cooldown--;
 
@@ -62,22 +61,11 @@ namespace Galaxia
                 }
             }
 
-            for (int i = bullets.Count - 1; i >= 0; i--)
-            {
-                bullets[i].Update();
-
-                if (ship.hitbox.Intersects(bullets[i].hitbox))
-                {
-                    //ship.Damage(1);
-                    bullets.Remove(bullets[i]);
-                }
-            }
-
             if (ai)
             {
                 if (aiType == 0)
                 {
-                    vel.Y = 7;
+                    vel.Y = 4.5f;
                     Vector2 pos1 = ship.pos;
 
                     Vector2 center = new Vector2(pos.X + 32, pos.Y + 32);
@@ -95,8 +83,8 @@ namespace Galaxia
 
                         if (shootTimer == 0)
                         {
-                            Shoot();
-                            shootTimer = 100;
+                            Shoot(ref bullets);
+                            shootTimer = 250;
                         }
                     }
                     else if (center.X > shipCenter.X + 8)
@@ -153,9 +141,6 @@ namespace Galaxia
 
         public override void Draw(SpriteBatch sb)
         {
-            foreach (Bullet bullet in bullets)
-                bullet.Draw(sb);
-
             base.Draw(sb);
         }
 
@@ -169,9 +154,9 @@ namespace Galaxia
             }
         }
 
-        public void Shoot()
+        public void Shoot(ref List<Bullet> bullets)
         {
-            Bullet bullet = new Bullet((int)pos.X + 31, (int)pos.Y + 32, 2, 32, new Vector2(0, 25));
+            Bullet bullet = new Bullet((int)pos.X + 31, (int)pos.Y + 32, 2, 32, new Vector2(0, 20));
             bullet.SetTexture(bulleT);
             bullets.Add(bullet);
             SoundManager.PlaySound("laser", -1f);

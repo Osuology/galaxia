@@ -3,7 +3,7 @@
   <SourceFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/Sounds/explode3.wav</SourceFile>
   <SourceTime>2017-11-04T18:17:20.2931857-07:00</SourceTime>
   <DestFile>C:/Users/Jeff/Documents/Visual Studio 2015/Projects/Galaxia/Galaga/Content/bin/DesktopGL/Sounds/explode3.xnb</DestFile>
-  <DestTime>2017-12-18T15:15:53.8727273-08:00</DestTime>
+  <DestTime>2017-12-20T00:39:41.4373255-08:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2017-03-01T07:05:36-08:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>
